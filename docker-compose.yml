@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  php-app:
+    image: prakritishrestha515/hello-php-app:latest
+    build: .
+    ports:
+      - "8081:80"
+    restart: always
+
