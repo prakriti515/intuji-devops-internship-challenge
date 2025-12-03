@@ -6,11 +6,10 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/prakriti515/php-hello-world.git'
+                    url: 'https://github.com/prakriti515/intuji-devops-internship-challenge.git'
             }
         }
 
@@ -26,7 +25,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', 'dockerhub') {
-                        echo "Authenticated to Docker Hub."
+                        echo "Authenticated to Docker Hub"
                     }
                 }
             }
@@ -42,11 +41,14 @@ pipeline {
             }
         }
 
+        // ✅ Add Deploy stage here
         stage('Deploy Container') {
             steps {
                 script {
-                    sh "docker rm -f php-hello-world || true"
-                    sh "docker run -d --name php-hello-world -p 8081:80 ${DOCKER_IMAGE}"
+                    // Remove previous container if exists
+                    sh 'docker rm -f hello-php-app || true'
+                    // Run new container
+                    sh 'docker run -d --name hello-php-app -p 8081:80 prakritishrestha515/hello-php-app:latest'
                 }
             }
         }
@@ -54,10 +56,10 @@ pipeline {
 
     post {
         success {
-            echo "Build, Push & Deploy Completed Successfully!"
+            echo "Build -> Push -> Deploy complete."
         }
         failure {
-            echo "Pipeline Failed! Check logs."
+            echo "Pipeline failed. Check console output."
         }
     }
 }
